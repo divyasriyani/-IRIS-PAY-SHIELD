@@ -1,0 +1,43 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Recognition</title>
+</head>
+<body>
+    <h1>Iris Recognition</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <label for="iris-image">Upload Iris Image:</label>
+        <input type="file" id="iris-image" name="iris-image" required>
+        <button type="submit">Recognize</button>
+    </form>
+    <p id="result"></p>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const resultElement = document.getElementById('result');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData();
+            const fileInput = document.getElementById('iris-image');
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                const response = await fetch('/recognize', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                resultElement.textContent = data.message;
+            } catch (error) {
+                console.error('Error:', error);
+                resultElement.textContent = 'An error occurred. Please try again.';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Recognition</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 40px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 10px; text-align: center; }
+        h2 { margin-bottom: 20px; }
+        input[type=file], button { margin: 10px 0; }
+        .status { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Iris Recognition Web App</h2>
+
+        {% if not enrolled %}
+        <form action="/enroll" method="post" enctype="multipart/form-data">
+            <label>Capture Iris Image (Camera):</label><br>
+            <input type="file" name="iris_image" accept="image/*" capture="environment" required><br>
+            <button type="submit">Enroll</button>
+        </form>
+        {% else %}
+        <form action="/authenticate" method="post" enctype="multipart/form-data">
+            <label>Select Iris Image from Gallery:</label><br>
+            <input type="file" name="auth_image" accept="image/*" required><br>
+            <button type="submit">Authenticate</button>
+        </form>
+        {% endif %}
+
+        {% if status %}
+            <div class="status {{ 'success' if 'successful' in status else 'fail' }}">{{ status }}</div>
+        {% endif %}
+    </div>
+</body>
+</html>
